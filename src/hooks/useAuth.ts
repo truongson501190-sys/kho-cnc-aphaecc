@@ -1,18 +1,29 @@
 // Re-export the useAuth hook from AuthContext for compatibility
 export { useAuth } from '../contexts/AuthContext';
-const login = async (msnv: string, password: string) => {
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("MSNV", msnv)
-    .eq("password", password)
-    .single();
+export const login = async (msnv: string, password: string) => {
+  try {
 
-  if (error || !data) {
-    return false;
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("MSNV", msnv)
+      .single();
+
+    if (error || !data) {
+      return false
+    }
+
+    if (data.password !== password) {
+      return false
+    }
+
+    localStorage.setItem("user", JSON.stringify(data))
+
+    return true
+
+  } catch (err) {
+    console.error("Login error:", err)
+    return false
   }
-
-  localStorage.setItem("user", JSON.stringify(data))
-  return true
 }
