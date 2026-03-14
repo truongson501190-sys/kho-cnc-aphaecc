@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+  <title>Hệ Thống Quản Lý Sản Xuất</title>
+  <meta name="description" content="Hệ thống quản lý sản xuất với báo cáo và theo dõi tiến độ" />
+  <meta name="author" content="MGX" />
+
+  <meta property="og:title" content="Hệ Thống Quản Lý Sản Xuất" />
+  <meta property="og:description" content="Hệ thống quản lý sản xuất với báo cáo và theo dõi tiến độ" />
+  <meta property="og:type" content="website" />
+
+  <!-- Mobile optimization -->
+  <meta name="theme-color" content="#1e293b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  
+  <style>
+    /* Prevent zoom on iOS */
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+    
+    /* Improve mobile scrolling */
+    * {
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Better mobile tap targets */
+    button, a, input, select, textarea {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
