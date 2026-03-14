@@ -195,25 +195,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     syncUserData();
   };
 
-  import { supabase } from "@/lib/supabase";
-
-const login = async (msnv: string, password: string) => {
-
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("MSNV", msnv)
-    .eq("password", password)
-    .single();
-
-  if (error || !data) {
-    return false;
-  }
-
-  localStorage.setItem("user", JSON.stringify(data));
-
-  return true;
-};
+  const login = async (msnv: string, password: string, rememberMe: boolean = false): Promise<boolean> => {
+    try {
+      console.log('🔐 LOGIN ATTEMPT:', { msnv, password });
       
       // Đồng bộ dữ liệu trước khi login
       syncUserData();
