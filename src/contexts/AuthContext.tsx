@@ -53,6 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq("msnv", msnv)
         .eq("password", password)
         .single();
+        console.log("DATA:", data);
+        console.log("ERROR:", error);
 
       if (error || !data) {
         console.log("Login failed");
