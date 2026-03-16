@@ -2,13 +2,11 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { supabase } from "@/lib/supabase";
 
 interface User {
-  id: string;
+  id: number;
   msnv: string;
-  fullName: string;
-  department: string;
-  position: string;
+  password: string;
+  name: string;
   role: string;
-  status: boolean;
 }
 
 interface AuthContextType {
@@ -16,7 +14,6 @@ interface AuthContextType {
   login: (msnv: string, password: string, remember?: boolean) => Promise<boolean>;
   logout: () => void;
   isAdmin: () => boolean;
-  canApprove: () => boolean;
   isAuthenticated: boolean;
   refreshUser: () => Promise<void>;
 }
@@ -25,7 +22,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used inside AuthProvider");
+  if (!context) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
   return context;
 };
 
@@ -35,9 +34,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Restore session
   useEffect(() => {
-    const session = localStorage.getItem("sessionUser");
+    const local = localStorage.getItem("sessionUser");
+    const session = sessionStorage.getItem("sessionUser");
 
-    if (session) {
+    if (local) {
+      setUser(JSON.parse(local));
+    } else if (session) {
       setUser(JSON.parse(session));
     }
 
@@ -53,22 +55,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq("msnv", msnv)
         .eq("password", password)
         .single();
-        console.log("DATA:", data);
-        console.log("ERROR:", error);
+
+      console.log("LOGIN DATA:", data);
+      console.log("LOGIN ERROR:", error);
 
       if (error || !data) {
         console.log("Login failed");
         return false;
       }
 
-      if (!data.status) {
-        console.log("User locked");
-        return false;
-      }
-
       setUser(data);
 
-      // Save session
       if (remember) {
         localStorage.setItem("sessionUser", JSON.stringify(data));
       } else {
@@ -89,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     sessionStorage.removeItem("sessionUser");
   };
 
-  // REFRESH USER DATA
+  // REFRESH USER
   const refreshUser = async () => {
     if (!user) return;
 
@@ -105,18 +102,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // PERMISSIONS
-  const isAdmin = () => user?.role === "Admin";
-
-  const canApprove = () =>
-    user?.role === "Admin" || user?.role === "Duyệt";
+  // PERMISSION
+  const isAdmin = () => user?.role === "admin";
 
   const value: AuthContextType = {
     user,
     login,
     logout,
     isAdmin,
-    canApprove,
     isAuthenticated: !!user,
     refreshUser
   };

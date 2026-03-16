@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(msnv, password);
+      const success = await login(msnv, password, rememberMe);
       if (success) {
         if (rememberMe) {
           localStorage.setItem('rememberedUser', msnv);
@@ -271,7 +271,7 @@ const LoginPage: React.FC = () => {
         <div className="text-center mb-8">
           <div className="mb-4">
             <img 
-              src="/public/assets/logo alphaecc.png" 
+              src="assets/logo alphaecc.png" 
               alt="AlphaEcc logo" 
               className="h-30 mx-auto drop-shadow-2x1 filter brightness-130 contrast-140"
             />
